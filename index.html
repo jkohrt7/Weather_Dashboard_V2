@@ -6,8 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel = "stylesheet" href = "styles.css">
+    
 </head>
-<body>
+<body class = "flex flex-col min-h-screen">
 
     <header>
         <!--Container for main header-->
@@ -36,15 +37,14 @@
         </nav>
 
         <!--Container for secondary header-->
-        <nav id = "bottom-nav" class = "flex bg-blue-500 h-10 py-1 px-2 items-center "> 
+        <nav id = "city-history" class = "flex bg-blue-500 h-10 py-1 px-2 justify-around items-center "> 
             <div class = "font-bold px-10 cursor-pointer">City Name</div>
-            <div>Another Name</div>
         </nav>
     </header>
 
-    <main>
+    <main class = "flex-grow">
         <!--Introduction card. Hidden after first search.-->
-        <article class = "flex flex-row justify-center flex-wrap space-x-5 p-6 m-4">
+        <article id="pre-search-cards" class = "flex flex-row justify-center flex-wrap space-x-5 p-6 m-4">
 
             <div class = "flex flex-col max-w-2xl p-10">
                 <h1 class = "text-center font-bold border-b-2 border-black text-4xl pb-2">Local Weather, Anywhere</h1>
@@ -64,22 +64,26 @@
         </article>
 
         <!--Cards go inside this. Hidden until search is entered-->
-        <article class = "flex flex-row justify-center flex-wrap p-6 m-4">
+        <article id="post-search-cards" class = "flex flex-row justify-center flex-wrap p-6 m-4 hidden">
             <div id= "current-weather-card" class = "flex flex-auto p-6 m-4 rounded-xl blue-gradient shadow">
                 <div id = "daily-info" class = "flex-auto">
 
                 </div>
-                <div id= "daily-icon" class = "flex-auto">
+                <div id= "daily-icon" class = "flex flex-auto flex-col  items-center">
                     
                 </div>
             </div>
 
-            <div id = "sunrise-card" class = "flex flex-col items-center flex-auto  p-6 m-4 rounded-xl blue-gradient shadow">
-                <div>Sunrise</div>
-                <div>Sunset</div>
+            <div id = "time-card" class = "flex flex-col items-center flex-auto  p-6 m-4 rounded-xl blue-gradient shadow">
+                <div id = "sunrise-section" class = 'flex flex-col'>
+
+                </div>
+                <div id = "sunset-section" class = 'flex flex-col'>
+
+                </div>
             </div>
 
-            <div id = "forecast-card" class = "flex space-x-4 justify-between flex-auto p-6 m-4 rounded-xl blue-gradient w-full shadow">
+            <div id = "forecast-card" class = "flex space-x-4 justify-between items-center flex-auto p-6 m-4 rounded-xl blue-gradient w-full shadow">
                 <div>Day 1</div>
                 <div>Day 2</div>
             </div>
@@ -87,10 +91,14 @@
     </main>
 
     <footer>
-
+        <div>Sunrise/Sunset icons made by <a href="https://www.flaticon.com/authors/nikita-golubev" title="Nikita Golubev">Nikita Golubev</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>
     </footer>
 </body>
 
+<script src = "https://cdnjs.cloudflare.com/ajax/libs/luxon/2.0.2/luxon.min.js"></script>
+<script src="./js/buildElements.js"></script>
+<!--SEARC-->
+<script src = "js/buildHistory.js"></script>
 <script type="module" src="./js/main.js"></script>
 
 </html>

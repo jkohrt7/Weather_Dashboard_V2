@@ -51,12 +51,12 @@ export let getWeatherData = function(countryCode, cityName, stateCode) {
         method: "GET",
         mode: "cors",
       }).then(function (weatherResponse) {
-        
+        //console.log(weatherResponse.json())
         let dataPromise = weatherResponse.json();
         return dataPromise;
       });
     }).catch((error) => {
-      console.log("Error: Problem with API call--invalid city name.");
+      console.log("Error: Problem with API call: " +error);
       return error;
     });
 };

@@ -5,79 +5,59 @@ import {getWeatherData} from "./weather.js"
 function init() {
     //add listener to search button
     let searchIcon = document.querySelector("#search-icon");
-    searchIcon.addEventListener("click", submitSearch); //TODO: submit search
+    searchIcon.addEventListener("click", (e) => submitSearch(e.target)); //TODO: submit search
 
     //add listener to search bar on enter
     let searchBar = document.querySelector("#search-bar");
     searchBar.addEventListener("keypress", (e) => {
-        if(e.key === 'Enter') {submitSearch()}
+        if(e.key === 'Enter') {submitSearch(e)}
     });
+
+    //get all localStorage items into the subheader
+    buildHistory();
+
+    //add submitSearch listener to each; the search will use their attribute data
+    let historyArr = document.querySelector("#city-history").childNodes;
+    historyArr.forEach(node => node.onclick = ((e) => submitSearch(e)));
 }
 
-async function submitSearch() {
-    let userInput = document.querySelector("#search-bar").value;
+//Makes calls to all other functions in order to submit a user's search
+async function submitSearch(e) {
+    //Get the search val. Either from history, or search bar.
+    let userInput;
+    if(e.target.hasAttribute("data-search")) {
+        userInput = e.target.dataset.search;
+        document.querySelector("#search-bar").value = userInput;
+    } else {
+        userInput = document.querySelector("#search-bar").value;
+    }
+
+    //Do not submit blank searches
     if(!userInput) {
         console.log("No value entered")
         return;
     }
-    //throughly process the results to get countrycode, cityname, statecode
-    let searchString = document.querySelector("#search-bar").value;
-    let searchArgs = await processSearchInput(searchString);
 
-    
+    //process the results to get standardized countrycode, cityname, statecode
+    let searchArgs = await processSearchInput(userInput);
 
     //give these to getWeather and await results
-    let weatherData = await getWeatherData(searchArgs["countryCode"], searchArgs["cityCode"], searchArgs["stateCode"])
+    let weatherData;
+    try{
+        weatherData = await getWeatherData(searchArgs["countryCode"], searchArgs["cityCode"], searchArgs["stateCode"])
+        addCity(searchArgs)
+    } catch(error) {
+        console.log(error);
+        return;
+    }
 
     //build HTML elements using the information
-    await buildWeatherCards(weatherData)
+    await buildWeatherCards(weatherData);
+    await buildHistory(submitSearch);
 
     //change visible elements to hidden when complete
     //change invisible elements to visible when complete
-    //changeVisibility()
-}
-
-function buildWeatherCards(data) {
-    // //set values from response
-    // let temp = response.current.temp;
-    // let wind = response.current.wind_speed;
-    // let humidity = response.current.humidity;
-    // let icon = response.current.weather[0].icon;
-    // let uvi = response.current.uvi;
-    // let sunrise = "";
-    // let sunset = "";
-
-    // //get the stuff you'll be adding to 
-    // let currentWeatherContainer = document.querySelector("#current-weather-card");
-    // let dailyIcon = document.querySelector("#daily-icon")
-    // let dailyInfo = document.querySelector("#daily-info")
-    // let sunriseContainer = document.querySelector("#sunrise-card");
-    // let forecastContainer = document.querySelector("#forecast-card");
-
-    // //clear out existing content
-    // dailyIcon.innerHTML = "";
-    // dailyInfo.innerHTML = "";
-    // sunriseContainer.innerHTML = "";
-    // forecastContainer.innerHTML = "";
-
-    // //instantiate some variables
-    // let node;
-    // let textNode;
-    // let att = document.createAttribute("class");
-
-    // //Add city name
-
-
-    // //add temperature, humidity, wind, and uvi
-    // let node = document.createElement("H2");
-    // let textNode = document.createTextNode(`${temp} °F`);
-    // att.value = "text-2xl text-white bold";
-    // node.appendChild(textNode);
-    // dailyInfo.appendChild();
-}
-
-function changeVisibility() {
-    //make starting screen invis
+    await changeVisibility()
 }
 
 init();

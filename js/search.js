@@ -2,9 +2,9 @@
 //import { getCountryCode } from "./getAreaCodes";
 
 //converts user input into a standard, usable format of country code, city coordinates, and state code.
-export function processSearchInput(str) {
+export async function processSearchInput(str) {
     let wordArray = str.split(",");
-    wordArray.map((element) => {
+    wordArray = wordArray.map((element) => {
         return (element.toLowerCase().trim())
     })
 
@@ -13,21 +13,21 @@ export function processSearchInput(str) {
         return {cityCode: wordArray[0], countryCode: "",stateCode:""}
     }
     else {
-        fullStateNames = Object.keys(stateList);
-        stateCodes = Object.values(stateList);
+        let fullStateNames = Object.keys(stateList);
+        let stateCodes = Object.values(stateList);
         
         //check if user provided a full state's name
         if(fullStateNames.includes(wordArray[1])) {
             return {"cityCode": wordArray[0], "countryCode": "USA", "stateCode": stateList[wordArray[1]]}
         } 
         //check if user provided a state code
-        else if(stateCodes.includes(wordArray[1])){
-            return {"cityCode": wordArray[0], "countryCode": "USA", "stateCode":wordArray[1]}
+        else if(stateCodes.includes(wordArray[1].toUpperCase())){
+            return {"cityCode": wordArray[0], "countryCode": "USA", "stateCode":wordArray[1].toUpperCase()}
         } 
         //Otherwise, assume user provided a country.
         else {
-            let country = getCountryCode(wordArray[1]);
-            return {"cityCode": wordArray[0], "countryCode": wordArray[1], "stateCode":""}
+            let country = await getCountryCode(wordArray[1]);
+            return {"cityCode": wordArray[0], "countryCode": country, "stateCode":""}
         }
     }
 }
