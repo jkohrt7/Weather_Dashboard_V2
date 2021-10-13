@@ -1,8 +1,49 @@
 //import { stateList } from "./stateCodes";
-//import { getCountryCode } from "./getAreaCodes";
+import {getWeatherData} from "./weather.js"
+
+//Makes calls to all other functions in order to submit a user's search
+export async function submitSearch(e) {
+    //Get the search val. Either from history, or search bar.
+    let userInput;
+
+    //Determine if the search was a history event or regular search
+    if(e.type == "click" && e.target.hasAttribute("data-search")) {
+        userInput = e.target.dataset.search;
+        document.querySelector("#search-bar").value = userInput;
+    } else {
+        userInput = document.querySelector("#search-bar").value;
+    }
+
+    //User did not type
+    if(userInput === "") {
+        console.log("No value entered")
+        return;
+    }
+
+    //process the results to get standardized countrycode, cityname, statecode
+    let searchArgs = await processSearchInput(userInput);
+
+    //give these to getWeather and await results
+    let weatherData;
+    try{
+        weatherData = await getWeatherData(searchArgs["countryCode"], searchArgs["cityCode"], searchArgs["stateCode"])
+        addCity(searchArgs)
+    } catch(error) {
+        console.log(error);
+        return;
+    }
+
+    //build HTML elements using the information
+    await buildWeatherCards(weatherData);
+    await buildHistory(submitSearch);
+
+    //change visible elements to hidden when complete
+    //change invisible elements to visible when complete
+    await changeVisibility()
+}
 
 //converts user input into a standard, usable format of country code, city coordinates, and state code.
-export async function processSearchInput(str) {
+async function processSearchInput(str) {
     let wordArray = str.split(",");
     wordArray = wordArray.map((element) => {
         return (element.toLowerCase().trim())

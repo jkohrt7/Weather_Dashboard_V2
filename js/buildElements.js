@@ -34,7 +34,7 @@ function buildWeatherCards(data) {
     //Add city name
     let searchVal = document.querySelector("#search-bar").value;
     node = document.createElement("H2");
-    node.setAttribute("class","text-2xl text-white bold");
+    node.setAttribute("class","text-xl text-white bold");
     textNode = document.createTextNode(`${searchVal.charAt(0).toUpperCase() +searchVal.slice(1)}`);
     node.appendChild(textNode);
     dailyInfo.appendChild(node);
@@ -42,7 +42,7 @@ function buildWeatherCards(data) {
     //add temperature, humidity, wind, and uvi
     //temp
     node = document.createElement("H1");
-    node.setAttribute("class","text-6xl text-white p-4");
+    node.setAttribute("class","text-5xl text-white p-4");
     textNode = document.createTextNode(`${temp} °F`);
     node.appendChild(textNode);
     dailyInfo.appendChild(node);
@@ -98,7 +98,7 @@ function buildWeatherCards(data) {
 
     //header
     node = document.createElement("H1");
-    node.setAttribute("class","text-4xl text-white bold");
+    node.setAttribute("class","text-3xl text-white bold");
     textNode = document.createTextNode(`${icon_caption}`);
     node.appendChild(textNode);
     dailyIcon.appendChild(node);
@@ -107,11 +107,11 @@ function buildWeatherCards(data) {
     //Sunrise
     node = document.createElement("IMG");
     node.src = "img/sunrise.png"
-    node.setAttribute("class", "h-24");
+    node.setAttribute("class", "h-24 filter invert");
     timeCard.appendChild(node);
 
     node = document.createElement("H1");
-    node.setAttribute("class","text-2xl bold");
+    node.setAttribute("class","text-xl bold text-white");
     textNode = document.createTextNode(`${sunrise.toLocaleString(luxon.DateTime.TIME_SIMPLE)}`);
     node.appendChild(textNode);
     timeCard.appendChild(node);
@@ -119,11 +119,11 @@ function buildWeatherCards(data) {
     //Sunset
     node = document.createElement("IMG");
     node.src = "img/sunset.png"
-    node.setAttribute("class", "h-24");
+    node.setAttribute("class", "h-24 filter invert");
     timeCard.appendChild(node);
 
     node = document.createElement("H1");
-    node.setAttribute("class","text-2xl bold");
+    node.setAttribute("class","text-xl bold text-white");
     textNode = document.createTextNode(`${sunset.toLocaleString(luxon.DateTime.TIME_SIMPLE)}`);
     node.appendChild(textNode);
     timeCard.appendChild(node);
@@ -145,7 +145,7 @@ function buildWeatherCards(data) {
 
         //add date
         let node = document.createElement("h4");
-        node.setAttribute("class", "text-center text-white text-2xl text-bold")
+        node.setAttribute("class", "text-center text-white text-xl text-bold pt-6 md:py-0")
         let textnode = document.createTextNode(luxon.DateTime.fromSeconds(date).toLocaleString({weekday: 'long'}));
         node.appendChild(textnode);
         dayNode.appendChild(node);
@@ -158,28 +158,28 @@ function buildWeatherCards(data) {
 
         //add High Temp
         node = document.createElement("P");
-        node.setAttribute("class", "text-white text-xl text-bold")
+        node.setAttribute("class", "text-white text-lg text-bold")
         textnode = document.createTextNode("High: " + Math.floor(highTemp) + " °F");
         node.appendChild(textnode);
         dayNode.appendChild(node);
 
         //Add low temp
         node = document.createElement("P");
-        node.setAttribute("class", "text-white text-xl text-bold")
+        node.setAttribute("class", "text-white text-lg text-bold")
         textnode = document.createTextNode("Low: " + Math.floor(lowTemp) + " °F");
         node.appendChild(textnode);
         dayNode.appendChild(node);
 
         //add wind
         node = document.createElement("P");
-        node.setAttribute("class", "text-white text-xl text-bold")
+        node.setAttribute("class", "text-white text-lg text-bold")
         textnode = document.createTextNode("Wind: " + wind + " MPH");
         node.appendChild(textnode);
         dayNode.appendChild(node);
 
         //add humidity
         node = document.createElement("P");
-        node.setAttribute("class", "text-white text-xl text-bold")
+        node.setAttribute("class", "text-white text-lg text-bold")
         textnode = document.createTextNode("Humidity: " + humidity + "%");
         node.appendChild(textnode);
         dayNode.appendChild(node);
