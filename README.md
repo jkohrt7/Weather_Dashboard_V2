@@ -20,7 +20,7 @@ This page is hosted on GitHub Pages and can be accessed [here](https://jkohrt7.g
 The search bar at the top accepts locations in the form "city", "city, state" or "city, country". Currently, only states in the US are supported.
 The sub-header below the search bar is populated with previous searches. Clicking on these will launch a search with the stored parameters.
 
-![A screenshot of the program](public/img/weatherSS.jpg)
+![A screenshot of the program](/img/weatherSS.jpg)
 
 ## Questions
 If you have any questions about using or contibuting to the project, you can contact me via email or though github:
