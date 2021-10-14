@@ -92,7 +92,7 @@ function buildWeatherCards(data) {
     //icon and header
     //icon
     node = document.createElement("IMG");
-    node.src = "http://openweathermap.org/img/wn/" + icon + "@2x.png"
+    node.src = "https://openweathermap.org/img/wn/" + icon + "@2x.png"
     node.setAttribute("class", "h-32");
     dailyIcon.appendChild(node);
 
@@ -152,7 +152,7 @@ function buildWeatherCards(data) {
         
         //add icon
         node  = document.createElement("IMG");
-        node.src =  "http://openweathermap.org/img/wn/" + icon + "@2x.png";
+        node.src =  "https://openweathermap.org/img/wn/" + icon + "@2x.png";
         node.setAttribute("class", 'block ml-auto mr-auto')
         dayNode.appendChild(node);
 
