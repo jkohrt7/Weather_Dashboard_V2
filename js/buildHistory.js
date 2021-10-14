@@ -89,5 +89,4 @@ function capitalize(str) {
     })
 
     return returnStr;
-
 }

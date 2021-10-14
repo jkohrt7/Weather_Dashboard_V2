@@ -1,8 +1,8 @@
-//import { stateList } from "./stateCodes";
 import {getWeatherData} from "./weather.js"
-import {getCountryCode} from "./getAreaCodes.js";
+import { stateList } from "./areaCodes.js";
+import { countryList } from "./areaCodes.js";
 
-//Makes calls to all other functions in order to submit a user's search
+//Modifies site components using the user's search values
 export async function submitSearch(e) {
     //Get the search val. Either from history, or search bar.
     let userInput;
@@ -22,14 +22,23 @@ export async function submitSearch(e) {
     }
 
     //process the results to get standardized countrycode, cityname, statecode
-    let searchArgs = await processSearchInput(userInput);
+    let searchArgs;
+    try{
+        searchArgs = await processSearchInput(userInput);
+    } 
+    catch(err) {
+        console.log(err);
+        return;
+    }
+    
 
     //give these to getWeather and await results
     let weatherData;
     try{
         weatherData = await getWeatherData(searchArgs["countryCode"], searchArgs["cityCode"], searchArgs["stateCode"])
         addCity(searchArgs)
-    } catch(error) {
+    } 
+    catch(error) {
         console.log(error);
         return;
     }
@@ -37,9 +46,6 @@ export async function submitSearch(e) {
     //build HTML elements using the information
     await buildWeatherCards(weatherData);
     await buildHistory(submitSearch);
-
-    //change visible elements to hidden when complete
-    //change invisible elements to visible when complete
     await changeVisibility()
 }
 
@@ -57,93 +63,40 @@ async function processSearchInput(str) {
     else {
         let fullStateNames = Object.keys(stateList);
         let stateCodes = Object.values(stateList);
+        let countryNames = Object.keys(countryList);
         
-        //check if user provided a full state's name
+        //check if user provided a full state's name after the city
         if(fullStateNames.includes(wordArray[1])) {
             return {"cityCode": wordArray[0], "countryCode": "USA", "stateCode": stateList[wordArray[1]]}
         } 
-        //check if user provided a state code
+        //check if user provided a state code after the city
         else if(stateCodes.includes(wordArray[1].toUpperCase())){
             return {"cityCode": wordArray[0], "countryCode": "USA", "stateCode":wordArray[1].toUpperCase()}
         } 
-        //Otherwise, assume user provided a country.
-        else {
-            let country = await getCountryCode(wordArray[1]);
+        //check if user provided a country after the city
+        else if(countryNames.includes(capitalize(wordArray[1]))){
+            let country = countryList[capitalize(wordArray[1])];
             return {"cityCode": wordArray[0], "countryCode": country, "stateCode":""}
+        }
+        else {
+            throw new Error("Location DNE");
         }
     }
 }
 
-//Converts country name to code
-function getCountryCode(countryName) {
+function capitalize(str) {
+    //str is blank
+    if(str.length < 1){
+        return str;
+    }
 
-    //gets a list of all the available country codes
-    return fetch("https://flagcdn.com/en/codes.json")
-    .then(function (resp) {
-        return resp.json();
+    let strArr = str.split(" ");
+    let returnStr = "";
+    strArr.forEach((word) => {
+        let firstLetter = word.slice(0,1);
+        firstLetter = firstLetter.toUpperCase();
+        returnStr += (firstLetter + word.slice(1) + " ");
     })
-    .then(function (data) {
-        let valArr = Object.values(data);
-        let keyArr = Object.keys(data);
 
-        for (let i = 0; i < keyArr.length; i++) {
-            if(valArr[i] == countryName) {
-                return keyArr[i]; 
-            }
-        }
-        return;
-    })
+    return returnStr.trim();
 }
-
-//object for getting state codes
-const stateList = {
-    'arizona': 'AZ',
-    'alabama': 'AL',
-    'alaska':'AK',
-    'crkansas': 'AR',
-    'california': 'CA',
-    'colorado': 'CO',
-    'connecticut': 'CT',
-    'delaware': 'DE',
-    'florida': 'FL',
-    'georgia': 'GA',
-    'hawaii': 'HI',
-    'idaho': 'ID',
-    'illinois': 'IL',
-    'indiana': 'IN',
-    'iowa': 'IA',
-    'kansas': 'KS',
-    'kentucky': 'KY',
-    'louisiana': 'LA',
-    'maine': 'ME',
-    'maryland': 'MD',
-    'massachusetts': 'MA',
-    'michigan': 'MI',
-    'minnesota': 'MN',
-    'mississippi': 'MS',
-    'missouri': 'MO',
-    'montana': 'MT',
-    'nebraska': 'NE',
-    'nevada': 'NV',
-    'new Hampshire': 'NH',
-    'new Jersey': 'NJ',
-    'new Mexico': 'NM',
-    'new York': 'NY',
-    'north carolina': 'NC',
-    'north dakota': 'ND',
-    'ohio': 'OH',
-    'oklahoma': 'OK',
-    'oregon': 'OR',
-    'pennsylvania': 'PA',
-    'rhode island': 'RI',
-    'south carolina': 'SC',
-    'south dakota': 'SD',
-    'tennessee': 'TN',
-    'texas': 'TX',
-    'utah': 'UT',
-    'vermont': 'VT',
-    'virginia': 'VA',
-    'washington': 'WA',
-    'west virginia': 'WV',
-    'wisconsin': 'WI',
-    'wyoming': 'WY'}
