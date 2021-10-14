@@ -31,7 +31,6 @@ export async function submitSearch(e) {
         return;
     }
     
-
     //give these to getWeather and await results
     let weatherData;
     try{
@@ -44,9 +43,10 @@ export async function submitSearch(e) {
     }
 
     //build HTML elements using the information
+    document.querySelector("#search-bar").value = capitalize(document.querySelector("#search-bar").value);
     await buildWeatherCards(weatherData);
     await buildHistory(submitSearch);
-    await changeVisibility()
+    await changeVisibility();
 }
 
 //converts user input into a standard, usable format of country code, city coordinates, and state code.
