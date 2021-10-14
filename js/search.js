@@ -1,5 +1,6 @@
 //import { stateList } from "./stateCodes";
 import {getWeatherData} from "./weather.js"
+import {getCountryCode} from "./getAreaCodes.js";
 
 //Makes calls to all other functions in order to submit a user's search
 export async function submitSearch(e) {
